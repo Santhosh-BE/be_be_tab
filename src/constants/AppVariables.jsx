@@ -1,11 +1,18 @@
 export const APP = {
   ROUTE: {
     LOGIN: '/',
+    SIGNUP: '/signup',
     DASHBOARD: '/dashboard',
+    COUNTRY_LIST: '/country-list',
     UPLOAD_MEDIA: '/upload',
     VIEW_GALLERY: '/gallery',
     MANAGE_ADDRESS: '/manage-address',
     ADDRESS_FORM: '/address-form',
+    COUNTRY_FORM: '/country-form',
+    CUSTOMER_SERVICE_FORM: '/customer-service-form',
+    CUSTOMER_SERVICE_LIST: '/customer-service-list',
+    PHOTOS: '/photos',
+    VIDEOS: '/videos',
     MAP_TO_ADDRESS: '/map-to-address',
     MEDIA_TO_CONTENT: '/media-to-content',
     NOT_MATCH: '*',

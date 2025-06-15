@@ -171,7 +171,7 @@ const AddressForm = () => {
             >
               Cancel
             </Button>
-            <Button variant="outlined" type="submit" disabled={false}>
+            <Button variant="default" type="submit" disabled={false}>
               {address ? 'Update Address' : 'Add Address'}
             </Button>
           </div>

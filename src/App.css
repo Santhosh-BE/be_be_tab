@@ -1,1 +1,83 @@
 @import 'tailwindcss';
+
+.tail-square {
+    position: relative;
+    border-radius: 0.375rem;
+    background-size: cover;
+    background-position: center;
+    min-height: 5rem;
+    max-height: 5rem;
+    overflow: hidden;
+}
+
+.tail-square::before {
+    content: "";
+    position: absolute;
+    height: 0%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 0.375rem;
+    transition: height 0.5s ease-out;
+    z-index: 1;
+    pointer-events: none;
+    /* ✅ Prevent overlay from blocking clicks */
+}
+
+.tail-square:hover::before {
+    height: 100%;
+}
+
+.tail-delete {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: white;
+    padding: 6px 10px;
+    border-radius: 9999px;
+    color: #dc2626;
+}
+
+.tail-square:hover .tail-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    display: inline-block;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot1 {
+    animation-delay: -0.32s;
+}
+
+.dot2 {
+    animation-delay: -0.16s;
+}
+
+.dot3 {
+    animation-delay: 0s;
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}

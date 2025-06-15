@@ -1,92 +1,97 @@
-import {
-  Home,
-  Upload,
-  Images,
-  MapPin,
-  Link as LinkIcon,
-  Tags,
-  LogOut,
-  User,
-  Crop,
-} from 'lucide-react';
-import { Button } from '../ui/button';
-import { Avatar, AvatarFallback } from '../ui/avatar';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { sidebarIconMap, sidebarMenuItems } from '../../constants';
 
-const navItems = [
-  { path: '/dashboard', icon: Home, label: 'Dashboard' },
-  { path: '/upload', icon: Upload, label: 'Upload Media' },
-  { path: '/gallery', icon: Images, label: 'View Gallery' },
-  { path: '/manage-address', icon: MapPin, label: 'Manage Addresses' },
-  { path: '/map-to-address', icon: LinkIcon, label: 'Crop to Address' },
-  { path: '/media-to-content', icon: Tags, label: 'Media to Content' },
-];
-
-export function Sidebar() {
+const Sidebar = ({ setExpand }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isHoverExpanded, setIsHoverExpanded] = useState(false);
 
-  const handleLogout = () => {
-    navigate('/');
+  const handleItemClick = (item) => {
+    setActiveItem(item.name);
+    navigate(item.link);
   };
 
+  const handleHover = (isHovering) => {
+    if (!isExpanded) {
+      setIsHoverExpanded(isHovering);
+    }
+  };
+
+  const toggleExpand = () => {
+    const newState = !isExpanded;
+    setIsExpanded(newState);
+    setExpand(newState);
+  };
+
+  // Set initial active item based on current route
+  if (!activeItem) {
+    const active = sidebarMenuItems.find((item) =>
+      location.pathname.includes(item.link),
+    );
+    if (active) setActiveItem(active.name);
+  }
+
   return (
-    <div className="flex flex-col h-full bg-white border-r border-slate-200">
-      {/* Logo/Brand */}
-      <div className="flex items-center h-16 px-6 border-b border-slate-200">
-        <div className="flex items-center space-x-3">
-          <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-            <Crop className="h-4 w-4 text-primary-foreground" />
-          </div>
-          <h1 className="text-lg font-semibold text-slate-900">
-            Media Manager
-          </h1>
-        </div>
-      </div>
+    <div className="w-20 bg-gray-100 flex flex-col items-center py-4 space-y-6 z-20">
+      <nav
+        className={`
+          bg-slate-50 border-r border-slate-100 shadow-sm absolute inset-y-0 left-0 mt-[10vh]
+          duration-300 ease-in-out md:fixed md:translate-x-0 mt-[10vh]
+          ${isExpanded ? 'w-64' : isHoverExpanded ? 'w-64 bg-slate-50/70 backdrop-blur-md' : 'w-20'}
+        `}
+      >
+        <button
+          className="absolute z-50 top-16 -right-3 bg-white hover:bg-slate-100 text-slate-500 p-0.5 rounded-full border border-slate-200"
+          onClick={toggleExpand}
+        >
+          <ChevronRight
+            className={`h-4 w-4 transform ${isExpanded ? 'rotate-0' : 'rotate-180'} duration-500`}
+          />
+        </button>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-2">
-        {navItems.map((item) => (
-          <Link key={item.path} to={item.path}>
-            <p
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                location === item.path
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              }`}
-            >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.label}
-            </p>
-          </Link>
-        ))}
+        <div
+          onMouseEnter={() => handleHover(true)}
+          onMouseLeave={() => handleHover(false)}
+          className="relative h-full overflow-hidden"
+        >
+          <div className="text-slate-500 h-full">
+            <div className="my-3 mb-10 p-0 h-full">
+              <ul className="list-none text-sm font-normal px-3 flex flex-col h-full">
+                {sidebarMenuItems.map((item, index) => (
+                  <li
+                    key={item.id}
+                    className={index === 6 ? 'mt-auto mb-5' : ''}
+                  >
+                    <div
+                      onClick={() => handleItemClick(item)}
+                      className={`
+                        group m-0 flex cursor-pointer rounded-lg items-center justify-between h-12 py-0 pr-3 mb-1
+                        pl-4
+                        ${activeItem === item.name ? 'text-blue-600 font-semibold bg-blue-200/20' : 'text-slate-500 hover:bg-slate-300/20'}
+                      `}
+                    >
+                      <div className="flex items-center gap-3">
+                        {sidebarIconMap[item.icon]}
+                        <div
+                          className={`truncate ${isExpanded || isHoverExpanded ? '' : 'w-0 h-0 opacity-0'}`}
+                        >
+                          {item.title}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </nav>
-
-      {/* User Profile */}
-      <div className="p-4 border-t border-slate-200">
-        <div className="flex items-center space-x-3">
-          <Avatar className="h-8 w-8">
-            <AvatarFallback className="bg-slate-300 text-slate-600">
-              <User className="h-4 w-4" />
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-slate-900 truncate">
-              {'User'}
-            </p>
-            <p className="text-xs text-slate-500">Logged in</p>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleLogout}
-            disabled={false}
-            className="text-slate-400 hover:text-slate-600 p-1"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

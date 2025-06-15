@@ -1,7 +1,6 @@
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Images, Video, MapPin, Link as LinkIcon, Plus } from 'lucide-react';
-import { Skeleton } from '../components/ui/skeleton';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -96,18 +95,7 @@ export default function Dashboard() {
                 Recent Uploads
               </h3>
               <div className="space-y-4">
-                {mediaLoading ? (
-                  Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="flex items-center space-x-3">
-                      <Skeleton className="h-12 w-12 rounded-lg" />
-                      <div className="flex-1">
-                        <Skeleton className="h-4 w-32 mb-1" />
-                        <Skeleton className="h-3 w-20" />
-                      </div>
-                      <Skeleton className="h-3 w-12" />
-                    </div>
-                  ))
-                ) : recentFiles.length > 0 ? (
+                {mediaLoading ? null : recentFiles.length > 0 ? (
                   recentFiles.map((file) => (
                     <div key={file.id} className="flex items-center space-x-3">
                       <div className="h-12 w-12 bg-slate-200 rounded-lg flex items-center justify-center">
